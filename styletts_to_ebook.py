@@ -2,7 +2,6 @@ import os
 import subprocess
 import re
 from pydub import AudioSegment
-print("poop")
 def is_folder_empty(folder_path):
     if os.path.exists(folder_path) and os.path.isdir(folder_path):
         # List directory contents
