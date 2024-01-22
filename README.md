@@ -29,8 +29,8 @@ This program converts eBooks into audio format using text-to-speech technology. 
 2. Install required Python packages:
    
    ```bash
-   pip install styletts2
-   pip install pydub
+   pip install styletts2 pydub nltk beautifulsoup4
+
 Ensure Calibre is installed on your system for eBook conversion.
 Usage
 
