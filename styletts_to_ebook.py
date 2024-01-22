@@ -324,10 +324,7 @@ def process_text_files(chapters_dir):
 
 # Convert chapters to audio using StyleTTS2
 def convert_chapters_to_audio(chapters_dir, output_audio_dir, target_voice_path=None):
-    if target_voice_path:
-        my_tts = tts.StyleTTS2(target_voice_path=target_voice_path)
-    else:
-        my_tts = tts.StyleTTS2()
+    my_tts = tts.StyleTTS2()
 
     if not os.path.exists(output_audio_dir):
         os.makedirs(output_audio_dir)
@@ -338,7 +335,10 @@ def convert_chapters_to_audio(chapters_dir, output_audio_dir, target_voice_path=
             output_file_path = os.path.join(output_audio_dir, chapter_file.replace('.txt', '.wav'))
             with open(chapter_path, 'r', encoding='utf-8') as file:
                 chapter_text = file.read()
-            my_tts.inference(chapter_text, output_wav_file=output_file_path)
+            if target_voice_path:
+                my_tts.inference(chapter_text, target_voice_path=target_voice_path, output_wav_file=output_file_path)
+            else:
+                my_tts.inference(chapter_text, output_wav_file=output_file_path)
             print(f"Converted {chapter_file} to audio.")
 
 
