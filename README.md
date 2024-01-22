@@ -1,10 +1,9 @@
 # ebook_to_audiobook_styletts
 
-This simple program uses Calibre to convert an eBook into chapters and StyleTTS2 to turn those chapters into an audiobook with voice cloning capabilities.
+This program uses Calibre for converting eBooks into chapters and StyleTTS2 to transform these chapters into an audiobook. 
 
-## eBook to Audio Converter
+It features text-to-speech technology with an optional voice cloning capability if a voice file is provided.
 
-This program converts eBooks into audio format using text-to-speech technology. It includes an optional feature for voice cloning if a voice file is provided.
 
 ## Features
 
