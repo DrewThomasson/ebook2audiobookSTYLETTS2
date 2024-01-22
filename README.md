@@ -19,6 +19,8 @@ This program converts eBooks into audio format using text-to-speech technology. 
 - `styletts2` Python package.
 - Calibre installed (for eBook conversion).
 - Install with sudo apt-get install -y calibre for Ubuntu or brew install calibre for mac
+- ffmpeg installed (For audiobook file creation)
+- Install with sudo apt-get install -y ffmpeg for Ubuntu or brew install ffmpeg for mac
 - Optional: Voice file for voice cloning.
 
 ## Installation
