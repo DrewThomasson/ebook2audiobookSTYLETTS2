@@ -2,6 +2,17 @@ import os
 import subprocess
 import re
 from pydub import AudioSegment
+print("poop")
+def is_folder_empty(folder_path):
+    if os.path.exists(folder_path) and os.path.isdir(folder_path):
+        # List directory contents
+        if not os.listdir(folder_path):
+            return True  # The folder is empty
+        else:
+            return False  # The folder is not empty
+    else:
+        print(f"The path {folder_path} is not a valid folder.")
+        return None  # The path is not a valid folder
 
 def wipe_folder(folder_path):
     # Check if the folder exists
@@ -9,18 +20,26 @@ def wipe_folder(folder_path):
         print(f"The folder {folder_path} does not exist.")
         return
 
-    # Iterate through all files in the folder
-    for filename in os.listdir(folder_path):
-        file_path = os.path.join(folder_path, filename)
-        # Check if it's a file and not a directory
-        if os.path.isfile(file_path):
-            try:
-                os.remove(file_path)
-                print(f"Removed file: {file_path}")
-            except Exception as e:
-                print(f"Failed to remove {file_path}. Reason: {e}")
-        else:
-            print(f"Skipping directory: {file_path}")
+    # Iterate through all items in the folder
+    for item in os.listdir(folder_path):
+        item_path = os.path.join(folder_path, item)
+        try:
+            # If it's a file, remove it
+            if os.path.isfile(item_path):
+                os.remove(item_path)
+                print(f"Removed file: {item_path}")
+            # If it's a directory, you can decide whether to delete it or not
+            elif os.path.isdir(item_path):
+                print(f"Found directory, not removing: {item_path}")
+                # Optionally, you can call wipe_folder recursively if you want to delete subdirectories:
+                # wipe_folder(item_path)
+        except Exception as e:
+            print(f"Failed to remove {item_path}. Reason: {e}")
+
+# Example usage
+# folder_to_wipe = 'path_to_your_folder'
+# wipe_folder(folder_to_wipe)
+
 
 # Example usage
 # folder_to_wipe = 'Working_files/temp_ebook'  # Replace with the path to your folder
@@ -361,8 +380,9 @@ if __name__ == "__main__":
     chapters_directory = "Working_files/temp_ebook"
     #process_text_files(chapters_directory)
     output_audio_directory = 'Chapter_wav_files'
-    wipe_folder(output_audio_directory)
-    wipe_folder(chapters_directory)
+    if is_folder_empty == False:
+        wipe_folder(output_audio_directory)
+        wipe_folder(chapters_directory)
     audiobook_output_path = "Audiobooks"
     print(f"{chapters_directory}||||{output_audio_directory}|||||{target_voice}")
     convert_chapters_to_audio(chapters_directory, output_audio_directory, target_voice)
