@@ -2,6 +2,7 @@ import os
 import subprocess
 import re
 from pydub import AudioSegment
+import tempfile
 def is_folder_empty(folder_path):
     if os.path.exists(folder_path) and os.path.isdir(folder_path):
         # List directory contents
@@ -37,11 +38,6 @@ def wipe_folder(folder_path):
 
 # Example usage
 # folder_to_wipe = 'path_to_your_folder'
-# wipe_folder(folder_to_wipe)
-
-
-# Example usage
-# folder_to_wipe = 'Working_files/temp_ebook'  # Replace with the path to your folder
 # wipe_folder(folder_to_wipe)
 
 
@@ -102,8 +98,9 @@ def create_m4b_from_chapters(input_dir, ebook_file, output_dir):
 
     # Main logic
     chapter_files = sorted([os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith('.wav')], key=sort_key)
-    temp_combined_wav = os.path.join('/tmp', 'combined.wav')
-    metadata_file = os.path.join('/tmp', 'metadata.txt')
+    temp_dir = tempfile.gettempdir()
+    temp_combined_wav = os.path.join(temp_dir, 'combined.wav')
+    metadata_file = os.path.join(temp_dir, 'metadata.txt')
     cover_image = extract_metadata_and_cover(ebook_file)
     output_m4b = os.path.join(output_dir, os.path.splitext(os.path.basename(ebook_file))[0] + '.m4b')
 
@@ -145,7 +142,7 @@ def create_chapter_labeled_book(ebook_file_path):
             os.makedirs(directory_path)
             print(f"Created directory: {directory_path}")
 
-    ensure_directory('Working_files/Book')
+    ensure_directory(os.path.join(".", 'Working_files', 'Book'))
 
     def convert_to_epub(input_path, output_path):
         # Convert the ebook to EPUB format using Calibre's ebook-convert
@@ -158,7 +155,7 @@ def create_chapter_labeled_book(ebook_file_path):
 
     def save_chapters_as_text(epub_path):
         # Create the directory if it doesn't exist
-        directory = "Working_files/temp_ebook"
+        directory = os.path.join(".", "Working_files", "temp_ebook")
         ensure_directory(directory)
 
         # Open the EPUB file
@@ -191,7 +188,8 @@ def create_chapter_labeled_book(ebook_file_path):
 
     # Example usage
     input_ebook = ebook_file_path  # Replace with your eBook file path
-    output_epub = 'Working_files/temp.epub'
+    output_epub = os.path.join(".", "Working_files", "temp.epub")
+
 
     if os.path.exists(output_epub):
         os.remove(output_epub)
@@ -204,33 +202,7 @@ def create_chapter_labeled_book(ebook_file_path):
 
     # Download the necessary NLTK data (if not already present)
     nltk.download('punkt')
-    """
-    def process_chapter_files(folder_path, output_csv):
-        with open(output_csv, 'w', newline='', encoding='utf-8') as csvfile:
-            writer = csv.writer(csvfile)
-            # Write the header row
-            writer.writerow(['Text', 'Start Location', 'End Location', 'Is Quote', 'Speaker', 'Chapter'])
 
-            # Process each chapter file
-            chapter_files = sorted(os.listdir(folder_path), key=lambda x: int(x.split('_')[1].split('.')[0]))
-            for filename in chapter_files:
-                if filename.startswith('chapter_') and filename.endswith('.txt'):
-                    chapter_number = int(filename.split('_')[1].split('.')[0])
-                    file_path = os.path.join(folder_path, filename)
-
-                    try:
-                        with open(file_path, 'r', encoding='utf-8') as file:
-                            text = file.read()
-                            sentences = nltk.tokenize.sent_tokenize(text)
-                            for sentence in sentences:
-                                start_location = text.find(sentence)
-                                end_location = start_location + len(sentence)
-                                writer.writerow([sentence, start_location, end_location, 'True', 'Narrator', chapter_number])
-                    except Exception as e:
-                        print(f"Error processing file {filename}: {e}")
-    """
-
-    
     def process_chapter_files(folder_path, output_csv):
         with open(output_csv, 'w', newline='', encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile)
@@ -259,8 +231,9 @@ def create_chapter_labeled_book(ebook_file_path):
                         print(f"Error processing file {filename}: {e}")
 
     # Example usage
-    folder_path = "Working_files/temp_ebook"  # Replace with your folder path
-    output_csv = 'Working_files/Book/Other_book.csv'
+    folder_path = os.path.join(".", "Working_files", "temp_ebook")
+    output_csv = os.path.join(".", "Working_files", "Book", "Other_book.csv")
+
     process_chapter_files(folder_path, output_csv)
 
     def sort_key(filename):
@@ -285,13 +258,15 @@ def create_chapter_labeled_book(ebook_file_path):
                         outfile.write("\nNEWCHAPTERABC\n")
 
     # Paths
-    input_folder = 'Working_files/temp_ebook'
-    output_file = 'Working_files/Book/Chapter_Book.txt'
+    input_folder = os.path.join(".", 'Working_files', 'temp_ebook')
+    output_file = os.path.join(".", 'Working_files', 'Book', 'Chapter_Book.txt')
+
 
     # Combine the chapters
     combine_chapters(input_folder, output_file)
 
-    ensure_directory('Working_files/Book')
+    ensure_directory(os.path.join(".", "Working_files", "Book"))
+
 
 #create_chapter_labeled_book()
 
@@ -314,32 +289,6 @@ def calibre_installed():
         print("Calibre is not installed. Please install Calibre for this functionality.")
         return False
 
-# Convert eBook to text using Calibre
-def convert_ebook_to_text(ebook_path):
-    output_path = ebook_path.rsplit('.', 1)[0] + '.txt'
-    subprocess.run(['ebook-convert', ebook_path, output_path])
-    return output_path
-
-# Split eBook into chapters
-def split_ebook_into_chapters(text_path):
-    chapters_dir = "chapters"
-    os.makedirs(chapters_dir, exist_ok=True)
-    with open(text_path, 'r', encoding='utf-8') as file:
-        text = file.read()
-    chapters = text.split("Chapter")  # Adjust based on your chapter delimiter
-    for i, chapter in enumerate(chapters):
-        with open(os.path.join(chapters_dir, f"chapter_{i}.txt"), 'w', encoding='utf-8') as chapter_file:
-            chapter_file.write(chapter)
-    return chapters_dir
-
-# Process text files (optional)
-def process_text_files(chapters_dir):
-    for filename in os.listdir(chapters_dir):
-        if filename.endswith('.txt'):
-            with open(os.path.join(chapters_dir, filename), 'r', encoding='utf-8') as file:
-                lines = [line for line in file if line.strip()]
-            with open(os.path.join(chapters_dir, filename), 'w', encoding='utf-8') as file:
-                file.writelines(lines)
 
 # Convert chapters to audio using StyleTTS2
 def convert_chapters_to_audio(chapters_dir, output_audio_dir, target_voice_path=None):
@@ -374,15 +323,12 @@ if __name__ == "__main__":
         sys.exit(1)
 
     create_chapter_labeled_book(ebook_file_path)
-    #text_file_path = convert_ebook_to_text(ebook_file_path)
-    #chapters_directory = split_ebook_into_chapters(text_file_path)
-    chapters_directory = "Working_files/temp_ebook"
-    #process_text_files(chapters_directory)
-    output_audio_directory = 'Chapter_wav_files'
+    chapters_directory = os.path.join(".","Working_files", "temp_ebook")
+    output_audio_directory = os.path.join(".", 'Chapter_wav_files')
     if is_folder_empty == False:
         wipe_folder(output_audio_directory)
         wipe_folder(chapters_directory)
-    audiobook_output_path = "Audiobooks"
+    audiobook_output_path = os.path.join(".", "Audiobooks")
     print(f"{chapters_directory}||||{output_audio_directory}|||||{target_voice}")
     convert_chapters_to_audio(chapters_directory, output_audio_directory, target_voice)
     create_m4b_from_chapters(output_audio_directory, ebook_file_path, audiobook_output_path)
