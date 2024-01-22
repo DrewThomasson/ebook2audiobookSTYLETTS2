@@ -3,6 +3,30 @@ import subprocess
 import re
 from pydub import AudioSegment
 
+def wipe_folder(folder_path):
+    # Check if the folder exists
+    if not os.path.exists(folder_path):
+        print(f"The folder {folder_path} does not exist.")
+        return
+
+    # Iterate through all files in the folder
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        # Check if it's a file and not a directory
+        if os.path.isfile(file_path):
+            try:
+                os.remove(file_path)
+                print(f"Removed file: {file_path}")
+            except Exception as e:
+                print(f"Failed to remove {file_path}. Reason: {e}")
+        else:
+            print(f"Skipping directory: {file_path}")
+
+# Example usage
+# folder_to_wipe = 'Working_files/temp_ebook'  # Replace with the path to your folder
+# wipe_folder(folder_to_wipe)
+
+
 def create_m4b_from_chapters(input_dir, ebook_file, output_dir):
     # Function to sort chapters based on their numeric order
     def sort_key(chapter_file):
@@ -221,29 +245,6 @@ def create_chapter_labeled_book(ebook_file_path):
     output_csv = 'Working_files/Book/Other_book.csv'
     process_chapter_files(folder_path, output_csv)
 
-    def wipe_folder(folder_path):
-        # Check if the folder exists
-        if not os.path.exists(folder_path):
-            print(f"The folder {folder_path} does not exist.")
-            return
-
-        # Iterate through all files in the folder
-        for filename in os.listdir(folder_path):
-            file_path = os.path.join(folder_path, filename)
-            # Check if it's a file and not a directory
-            if os.path.isfile(file_path):
-                try:
-                    os.remove(file_path)
-                    print(f"Removed file: {file_path}")
-                except Exception as e:
-                    print(f"Failed to remove {file_path}. Reason: {e}")
-            else:
-                print(f"Skipping directory: {file_path}")
-
-    # Example usage
-    # folder_to_wipe = 'Working_files/temp_ebook'  # Replace with the path to your folder
-    # wipe_folder(folder_to_wipe)
-
     def sort_key(filename):
         """Extract chapter number for sorting."""
         match = re.search(r'chapter_(\d+)\.txt', filename)
@@ -360,6 +361,8 @@ if __name__ == "__main__":
     chapters_directory = "Working_files/temp_ebook"
     #process_text_files(chapters_directory)
     output_audio_directory = 'Chapter_wav_files'
+    wipe_folder(output_audio_directory)
+    wipe_folder(chapters_directory)
     audiobook_output_path = "Audiobooks"
     print(f"{chapters_directory}||||{output_audio_directory}|||||{target_voice}")
     convert_chapters_to_audio(chapters_directory, output_audio_directory, target_voice)
