@@ -38,13 +38,13 @@ Navigate to the script's directory in the terminal and use one of the following 
 
 ### Without Voice Cloning:
 ```bash
-python styletts_to_ebook.py.py <path_to_ebook_file>
+python styletts_to_ebook.py <path_to_ebook_file>
 ```
 Replace <path_to_ebook_file> with the path to your eBook file.
 
 ### With Voice Cloning:
 ```bash
-python styletts_to_ebook.py.py <path_to_ebook_file> <path_to_voice_file>
+python styletts_to_ebook.py <path_to_ebook_file> <path_to_voice_file>
 ```
 Replace <path_to_ebook_file> with the path to your eBook file.
 
