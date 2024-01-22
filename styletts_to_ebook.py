@@ -40,11 +40,23 @@ def create_m4b_from_chapters(input_dir, ebook_file, output_dir):
 
     # Generate the final M4B file using ffmpeg
     def create_m4b(combined_wav, metadata_file, cover_image, output_m4b):
-        ffmpeg_cmd = ['ffmpeg', '-i', combined_wav, '-i', metadata_file, '-map_metadata', '1']
+        # Ensure the output directory exists
+        os.makedirs(os.path.dirname(output_m4b), exist_ok=True)
+        
+        ffmpeg_cmd = ['ffmpeg', '-i', combined_wav, '-i', metadata_file]
         if cover_image:
-            ffmpeg_cmd += ['-i', cover_image, '-map', '0', '-map', '2', '-c:v', 'copy', '-disposition:v:0', 'attached_pic']
-        ffmpeg_cmd += ['-c:a', 'aac', '-b:a', '192k', output_m4b]
+            ffmpeg_cmd += ['-i', cover_image, '-map', '0:a', '-map', '2:v']
+        else:
+            ffmpeg_cmd += ['-map', '0:a']
+        
+        ffmpeg_cmd += ['-map_metadata', '1', '-c:a', 'aac', '-b:a', '192k']
+        if cover_image:
+            ffmpeg_cmd += ['-c:v', 'png', '-disposition:v', 'attached_pic']
+        ffmpeg_cmd += [output_m4b]
+
         subprocess.run(ffmpeg_cmd, check=True)
+
+
 
     # Main logic
     chapter_files = sorted([os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith('.wav')], key=sort_key)
