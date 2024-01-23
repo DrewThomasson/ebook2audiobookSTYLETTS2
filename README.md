@@ -31,7 +31,7 @@ It features text-to-speech technology with an optional voice cloning capability 
   - macOS: `brew install ffmpeg`
 - Python packages: 
   ```bash
-  pip install styletts2 pydub nltk beautifulsoup4
+  pip install styletts2 pydub nltk beautifulsoup4 ebooklib
 ## Usage
 
 Navigate to the script's directory in the terminal and use one of the following commands:
