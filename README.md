@@ -26,9 +26,11 @@ It features text-to-speech technology with an optional voice cloning capability 
 - Calibre:
   - Ubuntu: `sudo apt-get install -y calibre`
   - macOS: `brew install calibre`
+  - Windows(Powershell in Administrator mode): `choco install calibre` 
 - FFmpeg:
   - Ubuntu: `sudo apt-get install -y ffmpeg`
   - macOS: `brew install ffmpeg`
+  - Windows(Powershell in Administrator mode)s: `choco install ffmpeg` 
 - Python packages: 
   ```bash
   pip install styletts2 pydub nltk beautifulsoup4 ebooklib
