@@ -45,7 +45,7 @@ https://github.com/DrewThomasson/ebook2audiobookSTYLETTS2/assets/126999465/b55f9
   - Windows(Powershell in Administrator mode)s: `choco install ffmpeg` 
 - Python packages: 
   ```bash
-  pip install styletts2 pydub nltk beautifulsoup4 ebooklib
+  pip install styletts2 pydub nltk beautifulsoup4 ebooklib tqdm
 ## Usage
 
 Navigate to the script's directory in the terminal and use one of the following commands:
