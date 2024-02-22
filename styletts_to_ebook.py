@@ -282,6 +282,7 @@ import os
 import subprocess
 from styletts2 import tts
 import sys
+from tqdm import tqdm  #for the loading bar
 
 # Check if Calibre's ebook-convert tool is installed
 def calibre_installed():
@@ -300,17 +301,20 @@ def convert_chapters_to_audio(chapters_dir, output_audio_dir, target_voice_path=
     if not os.path.exists(output_audio_dir):
         os.makedirs(output_audio_dir)
 
-    for chapter_file in sorted(os.listdir(chapters_dir)):
-        if chapter_file.endswith('.txt'):
-            chapter_path = os.path.join(chapters_dir, chapter_file)
-            output_file_path = os.path.join(output_audio_dir, chapter_file.replace('.txt', '.wav'))
-            with open(chapter_path, 'r', encoding='utf-8') as file:
-                chapter_text = file.read()
-            if target_voice_path:
-                my_tts.inference(chapter_text, target_voice_path=target_voice_path, output_wav_file=output_file_path)
-            else:
-                my_tts.inference(chapter_text, output_wav_file=output_file_path)
-            print(f"Converted {chapter_file} to audio.")
+    chapter_files = sorted([f for f in os.listdir(chapters_dir) if f.endswith('.txt')])
+    for chapter_file in tqdm(chapter_files, desc="Converting chapters to audio"):
+        chapter_path = os.path.join(chapters_dir, chapter_file)
+        output_file_path = os.path.join(output_audio_dir, chapter_file.replace('.txt', '.wav'))
+        with open(chapter_path, 'r', encoding='utf-8') as file:
+            chapter_text = file.read()
+        if target_voice_path:
+            my_tts.inference(chapter_text, target_voice_path=target_voice_path, output_wav_file=output_file_path)
+        else:
+            my_tts.inference(chapter_text, output_wav_file=output_file_path)
+        # Removed the print statement to keep the output clean and focus on the loading bar
+
+# Main execution flow remains the same
+
 
 
 # Main execution flow
