@@ -14,7 +14,7 @@ It features text-to-speech technology with an optional voice cloning capability 
 
 ## Requirements
 
-- Python 3.x
+- Python 3.10
 - `styletts2` Python package
 - Calibre (for eBook conversion)
 - FFmpeg (for audiobook file creation)
