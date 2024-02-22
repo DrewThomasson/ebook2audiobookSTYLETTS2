@@ -3,6 +3,10 @@
 This program uses Calibre for converting eBooks into chapters and StyleTTS2 to transform these chapters into an audiobook. 
 
 It features text-to-speech technology with an optional voice cloning capability if a voice file is provided.
+## Demo
+
+
+https://github.com/DrewThomasson/ebook2audiobookSTYLETTS2/assets/126999465/b55f9fe8-98d1-41ab-a585-3c5b99f9b39f
 
 
 ## Features
