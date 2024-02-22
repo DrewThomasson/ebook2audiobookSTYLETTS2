@@ -30,6 +30,7 @@ https://github.com/DrewThomasson/ebook2audiobookSTYLETTS2/assets/126999465/b55f9
 - Calibre (for eBook conversion)
 - FFmpeg (for audiobook file creation)
 - Optional: Voice file for voice cloning
+- 4gb ram
 
 ### Installation Instructions for Dependencies
 
