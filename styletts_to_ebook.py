@@ -156,6 +156,7 @@ def create_chapter_labeled_book(ebook_file_path):
     def save_chapters_as_text(epub_path):
         # Create the directory if it doesn't exist
         directory = os.path.join(".", "Working_files", "temp_ebook")
+        os.makedirs(directory, exist_ok=True)
         ensure_directory(directory)
 
         # Open the EPUB file
